@@ -2,6 +2,8 @@ const {Router} = require(`express`);
 const bodyParser = require(`body-parser`);
 const structurize = require(`../../util/structurize`);
 const notesRouter = new Router();
+const notesStore = require(`../../database/notes`);
+const imageStore = require(`../../database/images`);
 
 notesRouter.use(bodyParser.json());
 
@@ -28,10 +30,7 @@ notesRouter.post(``, async (req, res) => {
   res.send(resp);
 });
 
-const createRouter = (notesStore, imageStore) => {
-  notesRouter.notesStore = notesStore;
-  notesRouter.imageStore = imageStore;
-  return notesRouter;
-};
+notesRouter.notesStore = notesStore;
+notesRouter.imageStore = imageStore;
 
-module.exports = createRouter;
+module.exports = notesRouter;
