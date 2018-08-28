@@ -17,5 +17,3 @@ const connectToDb = async (collectionName) => {
 };
 
 module.exports = connectToDb;
-
-

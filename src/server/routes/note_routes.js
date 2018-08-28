@@ -1,7 +1,7 @@
 const {Router} = require(`express`);
+const notesRouter = new Router();
 const bodyParser = require(`body-parser`);
 const structurize = require(`../../util/structurize`);
-const notesRouter = new Router();
 const notesStore = require(`../../database/notes`);
 const imageStore = require(`../../database/images`);
 
