@@ -1,7 +1,6 @@
 const express = require(`express`);
 const router = new express.Router();
 const auth = require(`../../controllers/AuthController`);
-const connectEnsureLogin = require(`connect-ensure-login`);
 
 // restrict index for logged in user only
 router.get(`/`, auth.home);
@@ -21,6 +20,6 @@ router.post(`/login`, auth.doLogin);
 // route for logout action
 router.get(`/logout`, auth.logout);
 
-router.get(`/profile`, connectEnsureLogin.ensureLoggedIn(), auth.profile);
+router.get(`/profile`, auth.profile);
 
 module.exports = router;

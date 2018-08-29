@@ -1,6 +1,8 @@
 const express = require(`express`);
 const bodyParser = require(`body-parser`);
 
+const path = require(`path`);
+
 const passport = require(`./../config/passport`);
 const expressSession = require(`express-session`);
 
@@ -14,6 +16,9 @@ mongoose.connect(`mongodb://localhost/node-auth`)
   .then(() => console.log(`connection succesful`))
   .catch((err) => console.error(err));
 
+app.set(`views`, path.join(__dirname, `../views`));
+app.set(`view engine`, `jade`);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -23,16 +28,21 @@ app.use(expressSession({
   saveUninitialized: false
 }));
 
+app.use(express.static(path.join(__dirname, `../public`)));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
+const mustBeAuthenticated = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect(`/api/user/login`);
+  }
+};
+
+app.all(`/api/user/profile*`, mustBeAuthenticated);
 app.use(`/api/notes`, notesRouter);
 app.use(`/api/user`, userRouter);
-
-// app.use(function (req, res, next) {
-//   const err = new Error(`Not Found`);
-//   err.status = 404;
-//   next(err);
-// });
 
 module.exports = app;
